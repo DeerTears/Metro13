@@ -1,0 +1,122 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://sayhello.gd" type="Script" id=1]
+[ext_resource path="res://ClockPanel.gd" type="Script" id=2]
+[ext_resource path="res://audio/hi.wav" type="AudioStream" id=3]
+[ext_resource path="res://audio/lo.wav" type="AudioStream" id=4]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Panel" type="Panel" parent="."]
+margin_left = 25.0
+margin_top = 375.0
+margin_right = 300.0
+margin_bottom = 575.0
+script = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="Panel"]
+margin_left = 25.0
+margin_top = 25.0
+margin_right = 250.0
+margin_bottom = 75.0
+text = "state on?"
+align = 1
+valign = 1
+
+[node name="Button" type="Button" parent="Panel"]
+margin_left = 25.0
+margin_top = 100.0
+margin_right = 250.0
+margin_bottom = 175.0
+text = "the birb button"
+
+[node name="CounterPanel" type="Panel" parent="Panel"]
+margin_left = 300.0
+margin_top = 150.0
+margin_right = 575.0
+margin_bottom = 200.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Counter" type="Label" parent="Panel/CounterPanel"]
+margin_right = 275.0
+margin_bottom = 50.0
+text = "buttonpresstext"
+align = 1
+valign = 1
+
+[node name="ClockPanel" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 50.0
+margin_top = -275.0
+margin_right = 375.0
+margin_bottom = -175.0
+rect_min_size = Vector2( 325, 100 )
+script = ExtResource( 2 )
+
+[node name="Hi" type="AudioStreamPlayer" parent="ClockPanel"]
+stream = ExtResource( 3 )
+
+[node name="A" type="Button" parent="ClockPanel"]
+margin_left = 25.0
+margin_top = 23.5
+margin_right = 75.0
+margin_bottom = 73.5
+rect_min_size = Vector2( 25, 25 )
+rect_pivot_offset = Vector2( 59, 49 )
+text = "A"
+
+[node name="B" type="Button" parent="ClockPanel"]
+margin_left = 100.0
+margin_top = 23.5
+margin_right = 150.0
+margin_bottom = 73.5
+rect_min_size = Vector2( 25, 25 )
+rect_pivot_offset = Vector2( 59, 49 )
+text = "B"
+
+[node name="C" type="Button" parent="ClockPanel"]
+margin_left = 175.0
+margin_top = 25.0
+margin_right = 225.0
+margin_bottom = 75.0
+rect_min_size = Vector2( 25, 25 )
+rect_pivot_offset = Vector2( 59, 49 )
+text = "C"
+
+[node name="D" type="Button" parent="ClockPanel"]
+margin_left = 250.0
+margin_top = 25.0
+margin_right = 300.0
+margin_bottom = 75.0
+rect_min_size = Vector2( 25, 25 )
+rect_pivot_offset = Vector2( 59, 49 )
+text = "D"
+
+[node name="CoolTimer" type="Timer" parent="ClockPanel"]
+pause_mode = 2
+wait_time = 0.1
+one_shot = true
+
+[node name="Metronome" type="Timer" parent="ClockPanel"]
+process_mode = 0
+one_shot = true
+
+[node name="Maintainer" type="Timer" parent="ClockPanel"]
+process_mode = 0
+one_shot = true
+
+[node name="Lo" type="AudioStreamPlayer" parent="ClockPanel"]
+stream = ExtResource( 4 )
+[connection signal="timeout" from="ClockPanel/CoolTimer" to="ClockPanel" method="_on_CoolTimer_timeout"]
+[connection signal="timeout" from="ClockPanel/Metronome" to="ClockPanel" method="_on_Metronome_timeout"]
+[connection signal="timeout" from="ClockPanel/Maintainer" to="ClockPanel" method="_on_Maintainer_timeout"]

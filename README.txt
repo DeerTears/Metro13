@@ -1,8 +1,8 @@
-# MBR-Godot-Metronome
+-=MBR-Godot-Metronome=-
 
 My first original project in the Godot Engine. Coded with the help of @jmisacube.
 
-*EPILEPSY WARNING FOR THOSE WITH PHOTOSENSITIVITY!*
+EPILEPSY WARNING FOR THOSE WITH PHOTOSENSITIVITY!
 
 And with that out of the way...
 

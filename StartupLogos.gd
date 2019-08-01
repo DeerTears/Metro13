@@ -11,6 +11,28 @@ func _ready():
 	$AdTimer.wait_time = 2
 	$AdTimer.start()
 
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		if event.scancode == KEY_BRACELEFT:
+			if $Clock/Hi.volume_db < -19.5:
+				$Clock/Hi.volume_db = -80
+				lovol()
+				print ("Volume Muted.")
+			else:
+				$Clock/Hi.volume_db -= .5
+				lovol()
+				print ("Volume: " + $Clock/Hi.volume_db as String)
+		if event.scancode == KEY_BRACERIGHT:
+			if $Clock/Hi.volume_db < -.5:
+				if $Clock/Hi.volume_db == -80:
+					$Clock/Hi.volume_db = -20
+					lovol()
+					print ("Volume: " + $Clock/Hi.volume_db as String)
+				else:
+					$Clock/Hi.volume_db += .5
+					lovol()
+					print ("Volume: " + $Clock/Hi.volume_db as String)
+
 func _on_AdTimer_timeout():
 	if not finished:
 		$AdTimer.wait_time = 0.025
@@ -25,3 +47,8 @@ func update():
 	$Popup/Blackout.color = color
 	print ($Popup/Blackout.color as String)
 	$AdTimer.start()
+
+#this sets our low click sound to the same volume as the high click sound
+
+func lovol():
+	$Clock/Lo.volume_db = $Clock/Hi.volume_db

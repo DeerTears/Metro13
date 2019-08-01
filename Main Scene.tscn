@@ -1,30 +1,35 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://StartupLogos.gd" type="Script" id=1]
 [ext_resource path="res://MetronomeScript.gd" type="Script" id=2]
 [ext_resource path="res://audio/hi.wav" type="AudioStream" id=3]
 [ext_resource path="res://audio/lo.wav" type="AudioStream" id=4]
-[ext_resource path="res://images/popsicle.png" type="Texture" id=5]
-[ext_resource path="res://FMOD_LOGOS/FMOD Logo White - Black Background.png" type="Texture" id=6]
+[ext_resource path="res://Fonts/ShareTechMono-Regular.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://FMOD.gd" type="Script" id=6]
+[ext_resource path="res://images/popsicle.png" type="Texture" id=7]
 
-[sub_resource type="DynamicFontData" id=1]
+[sub_resource type="DynamicFont" id=1]
+resource_local_to_scene = true
+size = 64
+font_data = ExtResource( 5 )
+
+[sub_resource type="AudioStreamGenerator" id=2]
+
+[sub_resource type="DynamicFontData" id=3]
 font_path = "res://Fonts/TitilliumWeb-SemiBold.ttf"
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=4]
 size = 64
-font_data = SubResource( 1 )
+font_data = SubResource( 3 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=5]
 size = 48
-font_data = SubResource( 1 )
+font_data = SubResource( 3 )
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="Clock" type="Panel" parent="."]
 anchor_left = 0.5
@@ -54,6 +59,27 @@ one_shot = true
 [node name="Lo" type="AudioStreamPlayer" parent="Clock"]
 stream = ExtResource( 4 )
 mix_target = 2
+
+[node name="StartStop" type="Panel" parent="Clock"]
+margin_left = 550.0
+margin_top = 125.0
+margin_right = 750.0
+margin_bottom = 275.0
+
+[node name="LabelA" type="Label" parent="Clock/StartStop"]
+margin_right = 200.0
+margin_bottom = 50.0
+text = "Stopped"
+align = 1
+valign = 1
+
+[node name="LabelB" type="Label" parent="Clock/StartStop"]
+margin_top = 100.0
+margin_right = 200.0
+margin_bottom = 150.0
+text = "Stopped"
+align = 1
+valign = 1
 
 [node name="boxa" type="ColorRect" parent="Clock"]
 margin_top = 125.0
@@ -109,43 +135,35 @@ margin_right = 500.0
 margin_bottom = 275.0
 rect_pivot_offset = Vector2( -575, 100 )
 
-[node name="StartStop" type="Panel" parent="Clock"]
-margin_left = 550.0
-margin_top = 125.0
-margin_right = 750.0
-margin_bottom = 275.0
+[node name="BPM" type="Panel" parent="Clock"]
+margin_right = 40.0
+margin_bottom = 40.0
 
-[node name="LabelA" type="Label" parent="Clock/StartStop"]
-margin_right = 200.0
-margin_bottom = 50.0
-text = "Stopped"
-align = 1
-valign = 1
+[node name="numbers" type="RichTextLabel" parent="Clock/BPM"]
+margin_left = 114.179
+margin_top = -117.683
+margin_right = 418.18
+margin_bottom = 36.3168
+custom_fonts/mono_font = SubResource( 1 )
+text = "160"
 
-[node name="LabelB" type="Label" parent="Clock/StartStop"]
-margin_top = 100.0
-margin_right = 200.0
-margin_bottom = 150.0
-text = "Stopped"
-align = 1
-valign = 1
+[node name="Sounds" type="Node" parent="Clock"]
+script = ExtResource( 6 )
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="Stream" type="AudioStreamPlayer" parent="Clock"]
+stream = SubResource( 2 )
+
+[node name="ImageBG" type="TextureRect" parent="."]
 show_behind_parent = true
 margin_right = 800.0
 margin_bottom = 600.0
-texture = ExtResource( 5 )
+texture = ExtResource( 7 )
 stretch_mode = 5
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="Popup" type="Popup" parent="."]
+editor/display_folded = true
 margin_right = 40.0
 margin_bottom = 40.0
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="BG" type="ColorRect" parent="Popup"]
 margin_right = 800.0
@@ -157,14 +175,13 @@ margin_left = 40.0
 margin_top = 50.0
 margin_right = 768.0
 margin_bottom = 550.0
-texture = ExtResource( 6 )
 stretch_mode = 4
 
 [node name="Label" type="Label" parent="Popup"]
 margin_right = 800.0
 margin_bottom = 100.0
 rect_pivot_offset = Vector2( 650, 75 )
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 4 )
 text = "(is planned to use)"
 align = 1
 valign = 1
@@ -174,7 +191,7 @@ margin_top = 500.0
 margin_right = 800.0
 margin_bottom = 600.0
 rect_pivot_offset = Vector2( 650, 75 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 5 )
 text = "Firelight Technologies Pty Ltd."
 align = 1
 valign = 1

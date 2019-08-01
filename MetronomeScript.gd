@@ -1,6 +1,6 @@
 extends Panel
 
-#Metronome Stuff
+#Metronome Code
 
 #the pause/play var and the cooldown var to prevent pause/play from being spammed
 var pplay = false
@@ -10,6 +10,7 @@ var cooldown = false
 var timesig = 2
 var beat = 0
 var speedmulti = 0.50
+
 #this one's just for the console at the moment and isn't actually calculating beats/minute
 var BPM = 60
 
@@ -32,11 +33,9 @@ func _ready():
 func _input(event):
 	if event is InputEventKey and event.pressed:
 		if event.scancode == KEY_ENTER:
-			#print("enter pressed")
 			if not cooldown:
 				pplay = not pplay
 				$Metronome.wait_time = speedmulti
-				cooldown()
 				setlabel()
 				print("Song toggled: " + pplay as String)
 				if pplay:
@@ -44,46 +43,20 @@ func _input(event):
 		if event.scancode == KEY_LEFT:
 			if not cooldown:
 				if timesig > 1:
-					cooldown()
-					timesig -= 1
-					helpercolors()
-					print("time signature bumped down to " + timesig as String)
+					timesig(false, "time signature bumped down to ")
 		if event.scancode == KEY_RIGHT:
 			if not cooldown:
 				if timesig < 8:
-					cooldown()
-					timesig += 1
-					helpercolors()
-					print("time signature bumped up to " + timesig as String)
+					timesig(true, "time signature bumped up to ")
 		if event.scancode == KEY_UP:
-			#this could be it's own function where it does cooldown and bpm update outside of the speedmulti checks
 			if not cooldown:
-				if speedmulti > 0.1:
-					cooldown()
-					speedmulti -= 0.1
-					bpmupdate()
-					print("pseudotempo bumped up to " + BPM as String)
+				if speedmulti > 0.15:
+					bpmchange(false, "tempo bumped up to ")
 		if event.scancode == KEY_DOWN:
-			#this could borrow that same function
 			if not cooldown:
 				if speedmulti < 2:
-					cooldown()
-					speedmulti += 0.1
-					bpmupdate()
-					print("pseudotempo bumped down to " + BPM as String)
+					bpmchange(true, "tempo bumped down to ")
 
-#Timer Functions, both Godot's and my own
-#This should only fire if our cooldown isn't already on
-# warning-ignore:function_conflicts_variable
-func cooldown():
-	cooldown = true
-	$CoolTimer.start()
-#Our cooldown timer is doing its thing until...
-func _on_CoolTimer_timeout():
-	cooldown = false
-	print("-------")
-
-#To avoid overflowing the beat, and to let notes play untruncated when we hit stop
 func _on_Metronome_timeout():
 	$Metronome.wait_time = speedmulti
 	if pplay:
@@ -94,14 +67,13 @@ func _on_Metronome_timeout():
 			beat = 1
 		playnote()
 
-#Only My Functions
+func cooldown():
+	cooldown = true
+	$CoolTimer.start()
 
-#func label_text_set():
-#	if state_on:
-#		print(TEXT_ON as String)
-#	else:
-#		print(TEXT_OFF as String)
-#and eventually, hopefully, $StartStop.LabelA.Text = TEXT_ON / OFF
+func _on_CoolTimer_timeout():
+	cooldown = false
+	print("-------")
 
 func print_times():
 	if state_on:	
@@ -115,16 +87,31 @@ func startsong():
 	$Metronome.wait_time = speedmulti
 	$Metronome.start()
 
+func timesig(var adding:bool, var time_text:String):
+	cooldown()
+	var t_change = 1 if adding else -1
+	timesig += t_change
+	helpercolors()
+	print(time_text + timesig as String)
+
+func bpmchange(var adding:bool, var speed_text:String):
+	cooldown()
+	var s_change = 0.05 if adding else -0.05
+	speedmulti += s_change
+	bpmupdate()
+	print(speed_text + BPM as String)
+
+func bpmupdate():
+	BPM = 180-(speedmulti * 60)
+
 func setlabel():
+	cooldown()
 	if pplay:
 		$StartStop/LabelA.text = TEXT_ON
 		times += 1
 		$StartStop/LabelB.text = ("Started " + times as String + " times.")
 	else:
 		$StartStop/LabelA.text = TEXT_OFF
-
-func bpmupdate():
-	BPM = 180-(speedmulti * 60)
 
 func playnote():
 	if beat == 1:
@@ -148,7 +135,7 @@ func playnote():
 		$boxd.color = (WHITE as String)
 		print("D!")
 	if beat == 5:
-		$Hi.play()
+		$Lo.play()
 		helpercolors()
 		$boxe.color = (WHITE as String)
 		print("E!")
@@ -167,6 +154,31 @@ func playnote():
 		helpercolors()
 		$boxh.color = (WHITE as String)
 		print("H!")
+	if beat == 9:
+		$Lo.play()
+		helpercolors()
+#		$boxi.color = (WHITE as String)
+		print("I!")
+	if beat == 10:
+		$Lo.play()
+		helpercolors()
+#		$boxj.color = (WHITE as String)
+		print("J!")
+	if beat == 11:
+		$Lo.play()
+		helpercolors()
+#		$boxk.color = (WHITE as String)
+		print("K!")
+	if beat == 12:
+		$Lo.play()
+		helpercolors()
+#		$boxl.color = (WHITE as String)
+		print("L!")
+	if beat == 13:
+		$Lo.play()
+		helpercolors()
+#		$boxm.color = (WHITE as String)
+		print("M!")
 
 func helpercolors():
 	if timesig == 1:
